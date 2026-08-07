@@ -1,0 +1,58 @@
+<%- include('../partials/head', { title: 'Admin Dashboard' }) %>
+
+<div class="dash-header">
+  <div class="wrap">
+    <div>
+      <div style="color:#9AA0AA;font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">PSE Admin</div>
+      <h1 style="color:#fff;font-size:26px;">Candidate Pipeline</h1>
+    </div>
+    <a href="/admin/logout" style="color:#9AA0AA;font-size:13px;">Log out</a>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <form class="toolbar" method="GET" action="/admin/dashboard">
+      <input type="text" name="q" placeholder="Search name, email, specialization…" value="<%= query.q || '' %>" style="min-width:280px;">
+      <select name="status" onchange="this.form.submit()">
+        <option value="">All statuses</option>
+        <% ['New','Shortlisted','Interview','Placed','Rejected'].forEach(function(s){ %>
+          <option value="<%= s %>" <%= query.status === s ? 'selected' : '' %>><%= s %></option>
+        <% }) %>
+      </select>
+      <button class="btn btn-black" type="submit" style="border:none;cursor:pointer;font-family:inherit;padding:10px 22px;">Search</button>
+      <span style="margin-left:auto;color:#6B6F76;font-size:13px;"><%= candidates.length %> result<%= candidates.length === 1 ? '' : 's' %></span>
+    </form>
+
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Specialization</th>
+          <th>Experience</th>
+          <th>Status</th>
+          <th>Applied</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% candidates.forEach(function(c) { %>
+          <tr>
+            <td><strong><%= c.full_name %></strong><br><span style="color:#9A9A9A;font-size:12.5px;"><%= c.email %></span></td>
+            <td><%= c.specialization %></td>
+            <td><%= c.years_experience %></td>
+            <td><span class="status-badge status-<%= c.status %>"><%= c.status %></span></td>
+            <td><%= c.created_at.split(' ')[0] %></td>
+            <td><a href="/admin/candidate/<%= c.id %>" style="text-decoration:underline;">View</a></td>
+          </tr>
+        <% }) %>
+        <% if (candidates.length === 0) { %>
+          <tr><td colspan="6" style="text-align:center;color:#9A9A9A;padding:40px 0;">No candidates match this search.</td></tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+</body>
+</html>

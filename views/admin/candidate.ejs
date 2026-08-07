@@ -1,0 +1,58 @@
+<%- include('../partials/head', { title: candidate.full_name }) %>
+
+<div class="dash-header">
+  <div class="wrap">
+    <div>
+      <a href="/admin/dashboard" style="color:#9AA0AA;font-size:12px;letter-spacing:1px;text-transform:uppercase;">&larr; Back to pipeline</a>
+      <h1 style="color:#fff;font-size:26px;margin-top:8px;"><%= candidate.full_name %></h1>
+    </div>
+    <a href="/admin/logout" style="color:#9AA0AA;font-size:13px;">Log out</a>
+  </div>
+</div>
+
+<section>
+  <div class="wrap" style="max-width:820px;">
+    <% if (typeof saved !== 'undefined' && saved) { %><div class="alert alert-success">Changes saved.</div><% } %>
+
+    <p style="margin-bottom:24px;"><span class="status-badge status-<%= candidate.status %>"><%= candidate.status %></span></p>
+
+    <div class="detail-grid">
+      <div><div class="k">Email</div><div class="v"><a href="mailto:<%= candidate.email %>"><%= candidate.email %></a></div></div>
+      <div><div class="k">Phone</div><div class="v"><%= candidate.phone %></div></div>
+      <div><div class="k">Specialization</div><div class="v"><%= candidate.specialization %></div></div>
+      <div><div class="k">Experience</div><div class="v"><%= candidate.years_experience %></div></div>
+      <div><div class="k">Applied</div><div class="v"><%= candidate.created_at %></div></div>
+      <div><div class="k">CV</div><div class="v"><a href="/admin/candidate/<%= candidate.id %>/cv" style="text-decoration:underline;">Download <%= candidate.cv_original_name %></a></div></div>
+    </div>
+
+    <% if (candidate.giga_project_experience) { %>
+      <div style="margin:24px 0;">
+        <div class="k" style="margin-bottom:6px;">Vision 2030 / Giga-Project Experience</div>
+        <p style="background:#F5F5F5;padding:16px;border-radius:6px;"><%= candidate.giga_project_experience %></p>
+      </div>
+    <% } %>
+
+    <form action="/admin/candidate/<%= candidate.id %>" method="POST" style="margin-top:36px;border-top:1px solid #E4E4E4;padding-top:30px;">
+      <div class="form-row">
+        <div class="field">
+          <label>Update Status</label>
+          <select name="status">
+            <% ['New','Shortlisted','Interview','Placed','Rejected'].forEach(function(s){ %>
+              <option value="<%= s %>" <%= candidate.status === s ? 'selected' : '' %>><%= s %></option>
+            <% }) %>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Internal Notes (not visible to candidate)</label>
+        <textarea name="admin_notes"><%= candidate.admin_notes || '' %></textarea>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-black" type="submit" style="border:none;cursor:pointer;font-family:inherit;">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+</body>
+</html>

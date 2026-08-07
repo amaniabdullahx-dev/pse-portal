@@ -1,0 +1,26 @@
+<%- include('../partials/head', { title: 'Admin Login', bodyStyle: 'background:#0A0A0A;' }) %>
+<div class="form-page" style="max-width:400px;padding-top:110px;">
+  <div style="text-align:center;margin-bottom:30px;">
+    <img src="/img/PSE-logo-reversed-white.png" style="height:30px;">
+  </div>
+  <h1 style="color:#fff;text-align:center;font-size:22px;">Admin / Client Login</h1>
+
+  <% if (typeof error !== 'undefined' && error) { %><div class="alert alert-error"><%= error %></div><% } %>
+
+  <form action="/admin/login" method="POST" style="margin-top:24px;">
+    <div class="field">
+      <label style="color:#9AA0AA;">Email</label>
+      <input type="email" name="email" required>
+    </div>
+    <div class="field">
+      <label style="color:#9AA0AA;">Password</label>
+      <input type="password" name="password" required>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-white" type="submit" style="border:none;font-family:inherit;cursor:pointer;width:100%;">Log In</button>
+    </div>
+  </form>
+  <p style="text-align:center;margin-top:24px;"><a href="/" style="color:#6B6F76;font-size:13px;">← Back to site</a></p>
+</div>
+</body>
+</html>
