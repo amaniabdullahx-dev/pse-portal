@@ -1,0 +1,32 @@
+<%- include('partials/head', { title: 'My Application' }) %>
+<%- include('partials/site-header') %>
+
+<div class="dash-header">
+  <div class="wrap">
+    <div>
+      <div style="color:#9AA0AA;font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">Welcome back</div>
+      <h1 style="color:#fff;font-size:26px;"><%= candidate.full_name %></h1>
+    </div>
+    <a href="/logout" style="color:#9AA0AA;font-size:13px;">Log out</a>
+  </div>
+</div>
+
+<section>
+  <div class="wrap" style="max-width:760px;">
+    <div class="eyebrow-dark">Application Status</div>
+    <p style="margin-bottom:20px;"><span class="status-badge status-<%= candidate.status %>"><%= candidate.status %></span></p>
+
+    <div class="detail-grid">
+      <div><div class="k">Email</div><div class="v"><%= candidate.email %></div></div>
+      <div><div class="k">Phone</div><div class="v"><%= candidate.phone %></div></div>
+      <div><div class="k">Specialization</div><div class="v"><%= candidate.specialization %></div></div>
+      <div><div class="k">Experience</div><div class="v"><%= candidate.years_experience %></div></div>
+      <div><div class="k">CV on file</div><div class="v"><%= candidate.cv_original_name %></div></div>
+      <div><div class="k">Submitted</div><div class="v"><%= candidate.created_at %></div></div>
+    </div>
+
+    <p class="form-note">Status updates are made by the PSE team as your profile is reviewed against active mandates. You'll be contacted directly by email or phone for next steps.</p>
+  </div>
+</section>
+
+<%- include('partials/site-footer') %>

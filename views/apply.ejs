@@ -1,0 +1,71 @@
+<%- include('partials/head', { title: 'Apply' }) %>
+<%- include('partials/site-header') %>
+
+<div class="form-page">
+  <h1>Apply as a Candidate</h1>
+  <p class="lead">Create your PSE profile and submit your CV for review against our active mandates.</p>
+
+  <% if (typeof error !== 'undefined' && error) { %><div class="alert alert-error"><%= error %></div><% } %>
+
+  <form action="/apply" method="POST" enctype="multipart/form-data">
+    <div class="form-row">
+      <div class="field">
+        <label>Full Name</label>
+        <input type="text" name="full_name" required value="<%= typeof old !== 'undefined' ? old.full_name || '' : '' %>">
+      </div>
+      <div class="field">
+        <label>Phone</label>
+        <input type="tel" name="phone" required value="<%= typeof old !== 'undefined' ? old.phone || '' : '' %>">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Email</label>
+      <input type="email" name="email" required value="<%= typeof old !== 'undefined' ? old.email || '' : '' %>">
+    </div>
+
+    <div class="form-row">
+      <div class="field">
+        <label>Password</label>
+        <input type="password" name="password" required minlength="8">
+      </div>
+      <div class="field">
+        <label>Confirm Password</label>
+        <input type="password" name="password2" required minlength="8">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Area of Specialization</label>
+      <input type="text" name="specialization" placeholder="e.g. Process Engineering, Data Analytics, Project Management" required value="<%= typeof old !== 'undefined' ? old.specialization || '' : '' %>">
+    </div>
+
+    <div class="field">
+      <label>Years of Relevant Experience</label>
+      <select name="years_experience" required>
+        <option value="">Select…</option>
+        <option>0–2 years</option>
+        <option>3–5 years</option>
+        <option>6–10 years</option>
+        <option>10+ years</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Giga-Project / Vision 2030 Experience (optional)</label>
+      <textarea name="giga_project_experience" placeholder="Briefly describe any relevant experience with Vision 2030 entities, Giga-Projects, or PIF-linked organizations."><%= typeof old !== 'undefined' ? old.giga_project_experience || '' : '' %></textarea>
+    </div>
+
+    <div class="field file-field">
+      <label style="margin-bottom:10px;">Upload CV (PDF or Word, max 5MB)</label>
+      <input type="file" name="cv" accept=".pdf,.doc,.docx" required>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn btn-black" type="submit" style="border:none;font-family:inherit;cursor:pointer;">Submit Application</button>
+    </div>
+    <p class="form-note">By submitting, you agree to PSE reviewing your profile against current and future client mandates. Already applied? <a href="/login" style="text-decoration:underline;">Log in</a> to check your status.</p>
+  </form>
+</div>
+
+<%- include('partials/site-footer') %>
