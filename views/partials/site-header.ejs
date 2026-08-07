@@ -1,0 +1,16 @@
+<header class="site">
+  <div class="wrap">
+    <a href="/"><img class="logo" src="/img/PSE-logo-primary-black.png" alt="PSE"></a>
+    <nav class="main">
+      <a href="/#about">About</a>
+      <a href="/#services">Services</a>
+      <a href="/#contact">Contact</a>
+      <% if (candidate) { %>
+        <a href="/dashboard">My Application</a>
+      <% } else { %>
+        <a href="/login">Candidate Login</a>
+      <% } %>
+      <a class="cta" href="/apply">Apply Now</a>
+    </nav>
+  </div>
+</header>
