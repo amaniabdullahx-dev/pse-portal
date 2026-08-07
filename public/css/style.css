@@ -39,14 +39,16 @@ header.site {
   border-bottom: 1px solid var(--border);
   padding: 22px 0;
 }
-header.site .wrap { display: flex; align-items: center; justify-content: space-between; }
+header.site .wrap { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 0; }
 header.site img.logo { height: 26px; }
+nav.main { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 22px; }
 nav.main a {
-  margin-left: 28px;
-  font-size: 13px;
+  margin-left: 0;
+  font-size: 12.5px;
   letter-spacing: 1.5px;
   text-transform: uppercase;
   color: var(--grey);
+  white-space: nowrap;
 }
 nav.main a:hover { color: var(--black); }
 nav.main a.cta {
