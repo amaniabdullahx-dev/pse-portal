@@ -10,51 +10,86 @@
 
     gsap.registerPlugin(ScrollTrigger);
 
-    var panels = gsap.utils.toArray('.story-scroll .story-panel');
-    if (!panels.length) return;
+    var slides = gsap.utils.toArray('.slide');
+    if (!slides.length) return;
 
-    panels.forEach(function (panel, i) {
-      var bg = panel.querySelector('.story-bg');
-      var lines = panel.querySelectorAll('.story-content .line > span, .story-content .line > a');
+    slides.forEach(function (slide) {
+      var isPinned = slide.classList.contains('slide-pin');
+      var bg = slide.querySelector('.story-bg');
+      var lines = slide.querySelectorAll('.slide-content .line > span, .slide-content .line > a');
+      var revealEls = slide.querySelectorAll('.reveal');
 
-      // Pin the panel for one viewport of scroll while the next panel rises over it.
-      ScrollTrigger.create({
-        trigger: panel,
-        start: 'top top',
-        end: '+=100%',
-        pin: true,
-        pinSpacing: i === panels.length - 1,
-      });
+      if (isPinned) {
+        // Pin the slide for one viewport of scroll while the next slide rises over it.
+        ScrollTrigger.create({
+          trigger: slide,
+          start: 'top top',
+          end: '+=100%',
+          pin: true,
+        });
 
-      // Slow Ken Burns drift on the background image, tied to the panel's own scroll.
-      gsap.fromTo(
-        bg,
-        { scale: 1.12 },
-        {
-          scale: 1,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: panel,
-            start: 'top top',
-            end: '+=100%',
-            scrub: true,
-          },
+        if (bg) {
+          gsap.fromTo(
+            bg,
+            { scale: 1.12 },
+            {
+              scale: 1,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: slide,
+                start: 'top top',
+                end: '+=100%',
+                scrub: true,
+              },
+            }
+          );
         }
-      );
 
-      // Kinetic text: each line rises from below and fades in as the panel enters view.
-      gsap.timeline({
-        scrollTrigger: {
-          trigger: panel,
-          start: 'top 80%',
-          toggleActions: 'play none none reverse',
-        },
-      }).to(lines, {
-        y: 0,
-        duration: 1,
-        ease: 'power3.out',
-        stagger: 0.1,
-      });
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: slide,
+            start: 'top 80%',
+            toggleActions: 'play none none reverse',
+          },
+        }).to(lines, {
+          y: 0,
+          duration: 1,
+          ease: 'power3.out',
+          stagger: 0.1,
+        });
+      } else {
+        // Natural-height slide: kinetic text reveal fires once as the headline enters view.
+        if (lines.length) {
+          gsap.timeline({
+            scrollTrigger: {
+              trigger: slide,
+              start: 'top 75%',
+              toggleActions: 'play none none none',
+            },
+          }).to(lines, {
+            y: 0,
+            duration: 1,
+            ease: 'power3.out',
+            stagger: 0.1,
+          });
+        }
+
+        // Content blocks below the headline (cards, accordion, stats, partnership) fade + rise
+        // individually as each one scrolls into view.
+        revealEls.forEach(function (el) {
+          gsap.to(el, {
+            opacity: 1,
+            y: 0,
+            duration: 0.9,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: el,
+              start: 'top 85%',
+              toggleActions: 'play none none none',
+            },
+          });
+        });
+      }
     });
 
     ScrollTrigger.refresh();
