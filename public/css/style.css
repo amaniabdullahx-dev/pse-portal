@@ -88,7 +88,8 @@ header.site {
   padding: 18px 0;
 }
 header.site .wrap { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 0; }
-header.site img.logo { height: 24px; }
+header.site img.logo { height: 40px; }
+@media (max-width: 520px) { header.site img.logo { height: 32px; } }
 nav.main { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 22px; }
 nav.main a {
   margin-left: 0;
@@ -486,41 +487,147 @@ table.admin-table tr:hover { background: rgba(14,166,114,0.05); }
 }
 
 /* ---- split CTA cards (Slide 1) ---- */
-.split-cta { margin-top: 40px; }
+.split-cta { margin-top: 44px; }
 .split-cta > span {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  max-width: 820px;
+  gap: 24px;
+  max-width: 900px;
 }
 .split-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 6px;
-  padding: 28px 26px;
+  padding: 36px 30px 32px;
+  background: var(--glass-dark);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid var(--glass-border-dark);
+  border-radius: 20px;
+  text-decoration: none;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.split-card::before {
+  content: "";
+  position: absolute; inset: 0;
+  opacity: 0.5;
+  pointer-events: none;
+}
+.split-card.for-clients::before { background: radial-gradient(320px 200px at 100% 0%, rgba(59,91,219,0.28), transparent 70%); }
+.split-card.for-candidates::before { background: radial-gradient(320px 200px at 100% 0%, rgba(14,166,114,0.30), transparent 70%); }
+.split-card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.32); box-shadow: 0 24px 46px -20px rgba(0,0,0,0.65); }
+.split-card-icon {
+  position: relative; z-index: 1;
+  width: 50px; height: 50px; border-radius: 14px; flex: none;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--emerald), var(--azure));
+  color: #fff; margin-bottom: 10px;
+  box-shadow: 0 8px 20px -8px rgba(14,166,114,0.55);
+}
+.split-card-title { position: relative; z-index: 1; font-family: Georgia, serif; font-size: 20px; color: #fff; font-weight: 700; }
+.split-card-text { position: relative; z-index: 1; font-size: 14px; color: #C4C9D2; line-height: 1.55; min-height: 44px; }
+.split-card-link { position: relative; z-index: 1; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: #7FE6B8; margin-top: 10px; font-weight: 700; }
+
+@media (max-width: 640px) {
+  .split-cta > span { grid-template-columns: 1fr; }
+}
+
+/* ---- vision / mission cards (Story slide) ---- */
+.vm-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  max-width: 820px;
+  margin-top: 30px;
+}
+.vm-card-dark {
   background: var(--glass-dark);
   backdrop-filter: blur(16px) saturate(160%);
   -webkit-backdrop-filter: blur(16px) saturate(160%);
   border: 1px solid var(--glass-border-dark);
   border-radius: 18px;
-  text-decoration: none;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  padding: 26px 24px;
 }
-.split-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.3); box-shadow: 0 20px 40px -20px rgba(0,0,0,0.6); }
-.split-card-icon {
-  width: 44px; height: 44px; border-radius: 13px; flex: none;
-  display: flex; align-items: center; justify-content: center;
-  background: linear-gradient(135deg, var(--emerald), var(--azure));
-  color: #fff; margin-bottom: 6px;
-  box-shadow: 0 8px 20px -8px rgba(14,166,114,0.55);
+.vm-card-dark .icon-badge { width: 40px; height: 40px; border-radius: 12px; margin-bottom: 14px; }
+.vm-card-dark h3 { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; font-family: 'Lato'; font-weight: 700; }
+.vm-card-dark p { font-size: 14px; line-height: 1.6; color: #D7DAE0; margin: 0; font-weight: 300; }
+@media (max-width: 700px) {
+  .vm-split { grid-template-columns: 1fr; }
 }
-.split-card-title { font-family: Georgia, serif; font-size: 18px; color: #fff; font-weight: 700; }
-.split-card-text { font-size: 13.5px; color: #C4C9D2; line-height: 1.5; }
-.split-card-link { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: #7FE6B8; margin-top: 8px; font-weight: 700; }
 
-@media (max-width: 640px) {
-  .split-cta > span { grid-template-columns: 1fr; }
+/* ---- how-we-work: two-column, always-visible (Slide 4) ---- */
+.work-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 26px;
+  max-width: 980px;
+}
+.work-col {
+  background: var(--glass-dark);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid var(--glass-border-dark);
+  border-radius: 20px;
+  padding: 30px 26px;
+}
+.work-col-head { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+.work-col-head .icon-badge { width: 40px; height: 40px; border-radius: 12px; margin-bottom: 0; }
+.work-col-head h3 { font-size: 15px; letter-spacing: 1px; color: #fff; margin: 0; font-family: 'Lato'; font-weight: 700; }
+.work-subhead {
+  font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--gold); margin: 22px 0 12px;
+}
+.work-subhead:first-of-type { margin-top: 0; }
+.work-item { padding: 14px 0; border-top: 1px solid var(--glass-border-dark); }
+.work-item:first-of-type { border-top: none; padding-top: 0; }
+.work-item h4 { font-size: 14.5px; color: #fff; margin: 0 0 5px; font-family: 'Lato'; font-weight: 700; }
+.work-item p { font-size: 13px; line-height: 1.55; color: #C4C9D2; margin: 0; }
+@media (max-width: 760px) {
+  .work-columns { grid-template-columns: 1fr; }
+}
+
+/* ---- partnerships slide (logos) ---- */
+.partner-intro { max-width: 640px; }
+.partner-logos {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  max-width: 980px;
+  margin-top: 30px;
+}
+.partner-logo-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px;
+  height: 110px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 16px 32px -20px rgba(0,0,0,0.45);
+}
+.partner-logo-card img { max-width: 100%; max-height: 100%; object-fit: contain; }
+@media (max-width: 760px) {
+  .partner-logos { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 460px) {
+  .partner-logos { grid-template-columns: 1fr; }
+}
+
+/* ---- Vision 2030 text badge ---- */
+.v2030-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  color: #D7DAE0;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid var(--glass-border-dark);
+  border-radius: 30px;
+  padding: 8px 16px;
+  margin-top: 26px;
+}
+.v2030-badge::before {
+  content: ""; width: 7px; height: 7px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--emerald), var(--gold));
 }
 
 /* ---- accordion (Slide 3) ---- */
