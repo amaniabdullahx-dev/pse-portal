@@ -1,0 +1,46 @@
+<%- include('partials/head', { title: 'Hire With PSE' }) %>
+<%- include('partials/site-header') %>
+
+<div class="form-page">
+  <% if (sent) { %>
+    <h1>Thank you.</h1>
+    <p class="lead">Your request has been received. A member of the PSE team will reach out to you shortly to discuss your mandate.</p>
+    <div class="form-actions">
+      <a class="btn btn-black" href="/">Back to Home</a>
+    </div>
+  <% } else { %>
+    <h1>Hire With PSE</h1>
+    <p class="lead">Tell us who you are and how to reach you — we'll follow up to understand your mandate and how PSE can help.</p>
+
+    <% if (error) { %><div class="alert alert-error"><%= error %></div><% } %>
+
+    <form action="/hire" method="POST">
+      <div class="field">
+        <label>Organization / Entity Name</label>
+        <input type="text" name="organization_name" required placeholder="e.g. NEOM, ACWA Power, PIF subsidiary…" value="<%= old.organization_name || '' %>">
+      </div>
+
+      <div class="field">
+        <label>Phone Number</label>
+        <input type="tel" name="phone" required placeholder="+966 5X XXX XXXX" value="<%= old.phone || '' %>">
+      </div>
+
+      <div class="field">
+        <label>Your Name (optional)</label>
+        <input type="text" name="contact_name" value="<%= old.contact_name || '' %>">
+      </div>
+
+      <div class="field">
+        <label>Tell us about your mandate (optional)</label>
+        <textarea name="message" placeholder="Role, seniority, timeline — anything that helps us prepare."><%= old.message || '' %></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-black" type="submit" style="border:none;font-family:inherit;cursor:pointer;">Send Request</button>
+      </div>
+      <p class="form-note">We'll reach out within one business day.</p>
+    </form>
+  <% } %>
+</div>
+
+<%- include('partials/site-footer') %>
