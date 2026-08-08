@@ -37,6 +37,16 @@ CREATE TABLE IF NOT EXISTS admins (
   password_hash TEXT NOT NULL,
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
+
+CREATE TABLE IF NOT EXISTS leads (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  organization_name TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  contact_name TEXT,
+  message TEXT,
+  status TEXT NOT NULL DEFAULT 'New',
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
 `);
 
 // seed a default admin if none exists (credentials printed once, change on first login)

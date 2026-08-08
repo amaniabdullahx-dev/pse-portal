@@ -53,6 +53,31 @@ const upload = multer({
 app.get("/", (req, res) => res.render("index"));
 
 // ============================================================
+// CLIENTS: HIRE / CONTACT
+// ============================================================
+app.get("/hire", (req, res) => res.render("hire", { error: null, sent: false, old: {} }));
+
+app.post("/hire", (req, res) => {
+  const { organization_name, phone, contact_name, message } = req.body;
+  if (!organization_name || !organization_name.trim() || !phone || !phone.trim()) {
+    return res.render("hire", {
+      error: "Please provide your organization name and a phone number.",
+      sent: false,
+      old: req.body,
+    });
+  }
+  db.prepare(
+    `INSERT INTO leads (organization_name, phone, contact_name, message) VALUES (?, ?, ?, ?)`
+  ).run(
+    organization_name.trim(),
+    phone.trim(),
+    contact_name ? contact_name.trim() : "",
+    message ? message.trim() : ""
+  );
+  res.render("hire", { error: null, sent: true, old: {} });
+});
+
+// ============================================================
 // CANDIDATE: APPLY
 // ============================================================
 app.get("/apply", (req, res) => res.render("apply", { error: null, old: {} }));
@@ -184,6 +209,17 @@ app.post("/admin/candidate/:id", requireAdmin, (req, res) => {
   const { status, admin_notes } = req.body;
   db.prepare("UPDATE candidates SET status = ?, admin_notes = ? WHERE id = ?").run(status, admin_notes || "", req.params.id);
   res.redirect(`/admin/candidate/${req.params.id}?saved=1`);
+});
+
+app.get("/admin/leads", requireAdmin, (req, res) => {
+  const leads = db.prepare("SELECT * FROM leads ORDER BY created_at DESC").all();
+  res.render("admin/leads", { leads });
+});
+
+app.post("/admin/leads/:id", requireAdmin, (req, res) => {
+  const { status } = req.body;
+  db.prepare("UPDATE leads SET status = ? WHERE id = ?").run(status, req.params.id);
+  res.redirect("/admin/leads");
 });
 
 app.get("/admin/candidate/:id/cv", requireAdmin, (req, res) => {
