@@ -614,6 +614,17 @@ table.admin-table tr:hover { background: rgba(14,166,114,0.05); }
   .partner-logos { grid-template-columns: 1fr; }
 }
 
+/* ---- heritage tag (origin story credit) ---- */
+.heritage-tag {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-size: 13px;
+    letter-spacing: 0.3px;
+    color: var(--gold);
+    opacity: 0.92;
+    margin-bottom: 14px;
+}
+
 /* ---- Vision 2030 text badge ---- */
 .v2030-badge {
   display: inline-flex; align-items: center; gap: 8px;
