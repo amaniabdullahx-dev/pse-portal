@@ -93,5 +93,12 @@
     });
 
     ScrollTrigger.refresh();
+
+        // Images/webfonts can finish loading after DOMContentLoaded and shift layout,
+        // which leaves early trigger positions (esp. above-the-fold content) stale.
+        // Re-measure once everything has actually finished loading.
+        window.addEventListener('load', function () {
+                ScrollTrigger.refresh();
+        });
   });
 })();
