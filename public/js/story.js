@@ -96,9 +96,23 @@
 
         // Images/webfonts can finish loading after DOMContentLoaded and shift layout,
         // which leaves early trigger positions (esp. above-the-fold content) stale.
-        // Re-measure once everything has actually finished loading.
-        window.addEventListener('load', function () {
+        // Re-measure once everything has actually finished loading. If the page is
+        // already fully loaded (e.g. assets served from cache) the 'load' event may
+        // never fire after this point, so check readyState directly as well.
+        if (document.readyState === 'complete') {
                 ScrollTrigger.refresh();
-        });
+        } else {
+                window.addEventListener('load', function () {
+                          ScrollTrigger.refresh();
+                });
+        }
+
+        // Belt-and-braces: fonts can swap in after 'load' too (FOFT/FOIT), which can
+        // still shift line heights slightly. Do one more pass once fonts are ready.
+        if (document.fonts && document.fonts.ready) {
+                document.fonts.ready.then(function () {
+                          ScrollTrigger.refresh();
+                });
+        }
   });
 })();
