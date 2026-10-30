@@ -1,0 +1,29 @@
+<%- include('../partials/head', { title: job.title }) %>
+<%- include('../partials/admin-header', { heading: job.title + ' — ' + job.client }) %>
+<section>
+  <div class="wrap" style="max-width:920px;">
+    <% if (!configured) { %><div class="alert alert-error">AI is not switched on yet: add ANTHROPIC_API_KEY in Railway Variables.</div><% } %>
+    <p class="muted"><%= job.status %> · <a href="/admin/jobs" style="text-decoration:underline;">all roles</a></p>
+    <p style="white-space:pre-wrap;background:#F5F5F5;padding:16px;border-radius:6px;"><%= job.description %></p>
+    <div class="no-print" style="display:flex;gap:12px;margin:18px 0;">
+      <form method="POST" action="/admin/jobs/<%= job.id %>/match"><button class="btn btn-black" style="border:none;cursor:pointer;font-family:inherit;">Match / refresh candidates</button></form>
+      <form method="POST" action="/admin/jobs/<%= job.id %>/close"><button class="btn" style="cursor:pointer;font-family:inherit;border:1px solid #ccc;background:#fff;"><%= job.status === 'Open' ? 'Close role' : 'Reopen role' %></button></form>
+      <button class="btn" onclick="window.print()" style="cursor:pointer;font-family:inherit;border:1px solid #ccc;background:#fff;">Print shortlist</button>
+    </div>
+    <p class="muted">Matching runs in the background; refresh after a minute. Top 3 are the proposed shortlist for your review.</p>
+    <% matches.forEach(function(m, i){ %>
+      <div class="ai-card" <%- i < 3 ? 'style="border-color:#0EA672;"' : '' %>>
+        <div style="display:flex;justify-content:space-between;">
+          <h3 style="margin:0;"><%= i < 3 ? 'Top ' + (i + 1) + ' · ' : '' %><a href="/admin/candidate/<%= m.candidate_id %>"><%= m.full_name %></a></h3>
+          <strong style="font-size:24px;"><%= m.score %></strong>
+        </div>
+        <div class="muted"><%= m.specialization %> · overall profile score <%= m.ai_score %> · <%= m.status %></div>
+        <p style="margin:10px 0;"><%= m.rationale %></p>
+        <% if (m.gaps.length) { %><p class="muted"><strong>Gaps:</strong> <%= m.gaps.join(' · ') %></p><% } %>
+      </div>
+    <% }) %>
+    <% if (!matches.length) { %><p style="text-align:center;color:#9A9A9A;padding:30px 0;">No matches yet. Click “Match / refresh candidates”.</p><% } %>
+  </div>
+</section>
+</body>
+</html>

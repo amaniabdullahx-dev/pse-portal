@@ -1,0 +1,39 @@
+<%- include('../partials/head', { title: 'AI Candidate Report' }) %>
+<%- include('../partials/admin-header', { heading: 'AI Candidate Report' }) %>
+<section>
+  <div class="wrap" style="max-width:980px;">
+    <% if (!configured) { %><div class="alert alert-error">AI is not switched on yet: add ANTHROPIC_API_KEY in Railway Variables.</div><% } %>
+    <div class="no-print" style="display:flex;gap:12px;align-items:center;margin-bottom:18px;">
+      <form method="POST" action="/admin/agent/analyze-all"><button class="btn btn-black" style="border:none;cursor:pointer;font-family:inherit;" <%= unscored ? '' : 'disabled' %>>Analyze <%= unscored %> new CV<%= unscored === 1 ? '' : 's' %></button></form>
+      <button class="btn" onclick="window.print()" style="cursor:pointer;font-family:inherit;border:1px solid #ccc;background:#fff;">Print / Save PDF</button>
+      <% if (pending) { %><span class="muted"><%= pending %> in progress — refresh in a minute.</span><% } %>
+    </div>
+    <p class="muted">The agent recommends only. It never rejects or moves a candidate; nationality and gender are shown for human verification and are not scored. Scores out of 100: <%= RUBRIC.map(function(r){return r.label+' '+r.max}).join(' · ') %>.</p>
+
+    <% items.forEach(function(x, i) { var c = x.c, r = x.r; %>
+      <div class="ai-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;">
+          <div>
+            <div class="muted">#<%= i + 1 %></div>
+            <h3 style="margin:2px 0;"><a href="/admin/candidate/<%= c.id %>"><%= c.full_name %></a></h3>
+            <div class="muted"><%= (r.profile && r.profile.current_title) || c.specialization %> · <%= (r.profile && r.profile.years_experience) || c.years_experience %> yrs</div>
+          </div>
+          <div style="text-align:right;"><div style="font-size:30px;font-weight:700;"><%= r.total %></div><span class="tier tier-<%= r.tier %>"><%= r.tier %></span></div>
+        </div>
+        <p style="margin:12px 0;"><%= r.summary %></p>
+        <% RUBRIC.forEach(function(k){ var s = r.scores[k.key]; %>
+          <div style="display:flex;align-items:center;gap:10px;font-size:13px;margin:4px 0;">
+            <div style="width:230px;"><%= k.label %></div>
+            <div class="bar" style="flex:1;"><i style="width:<%= Math.round(s.points / k.max * 100) %>%"></i></div>
+            <div style="width:50px;text-align:right;"><%= s.points %>/<%= k.max %></div>
+          </div>
+        <% }) %>
+        <% if (r.gaps && r.gaps.length) { %><p class="muted" style="margin-top:10px;"><strong>Gaps:</strong> <%= r.gaps.join(' · ') %></p><% } %>
+        <% if (r.red_flags && r.red_flags.length) { %><p class="muted" style="color:#9A2A2A;"><strong>Check:</strong> <%= r.red_flags.join(' · ') %></p><% } %>
+      </div>
+    <% }) %>
+    <% if (!items.length) { %><p style="text-align:center;color:#9A9A9A;padding:40px 0;">No analysed CVs yet.</p><% } %>
+  </div>
+</section>
+</body>
+</html>

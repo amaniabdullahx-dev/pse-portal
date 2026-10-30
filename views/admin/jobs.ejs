@@ -1,0 +1,26 @@
+<%- include('../partials/head', { title: 'Client Roles' }) %>
+<%- include('../partials/admin-header', { heading: 'Client Roles' }) %>
+<section>
+  <div class="wrap" style="max-width:880px;">
+    <h3>New role</h3>
+    <form method="POST" action="/admin/jobs" style="margin:14px 0 36px;">
+      <div class="form-row">
+        <div class="field"><label>Client / Entity</label><input type="text" name="client" required></div>
+        <div class="field"><label>Role title</label><input type="text" name="title" required></div>
+      </div>
+      <div class="field"><label>Description &amp; requirements (paste from the client)</label><textarea name="description" rows="7" required></textarea></div>
+      <button class="btn btn-black" style="border:none;cursor:pointer;font-family:inherit;">Save role</button>
+    </form>
+    <table class="admin-table">
+      <thead><tr><th>Role</th><th>Client</th><th>Status</th><th>Created</th><th></th></tr></thead>
+      <tbody>
+        <% jobs.forEach(function(j){ %>
+          <tr><td><strong><%= j.title %></strong></td><td><%= j.client %></td><td><%= j.status %></td><td><%= j.created_at.split(' ')[0] %></td><td><a href="/admin/jobs/<%= j.id %>" style="text-decoration:underline;">Open</a></td></tr>
+        <% }) %>
+        <% if (!jobs.length) { %><tr><td colspan="5" style="text-align:center;color:#9A9A9A;padding:30px 0;">No roles yet.</td></tr><% } %>
+      </tbody>
+    </table>
+  </div>
+</section>
+</body>
+</html>

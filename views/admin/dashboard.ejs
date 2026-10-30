@@ -1,17 +1,6 @@
 <%- include('../partials/head', { title: 'Admin Dashboard' }) %>
 
-<div class="dash-header">
-  <div class="wrap">
-    <div>
-      <div style="color:#9AA0AA;font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">PSE Admin</div>
-      <h1 style="color:#fff;font-size:26px;">Candidate Pipeline</h1>
-    </div>
-    <div>
-      <a href="/admin/leads" style="color:#9AA0AA;font-size:13px;margin-right:20px;">Client Leads</a>
-      <a href="/admin/logout" style="color:#9AA0AA;font-size:13px;">Log out</a>
-    </div>
-  </div>
-</div>
+<%- include('../partials/admin-header', { heading: 'Candidate Pipeline' }) %>
 
 <section>
   <div class="wrap">
@@ -33,6 +22,7 @@
           <th>Name</th>
           <th>Specialization</th>
           <th>Experience</th>
+          <th>AI score</th>
           <th>Status</th>
           <th>Applied</th>
           <th></th>
@@ -44,13 +34,14 @@
             <td><strong><%= c.full_name %></strong><br><span style="color:#9A9A9A;font-size:12.5px;"><%= c.email %></span></td>
             <td><%= c.specialization %></td>
             <td><%= c.years_experience %></td>
+            <td><%= c.ai_score != null ? c.ai_score : (c.ai_status === 'running' ? '…' : '—') %></td>
             <td><span class="status-badge status-<%= c.status %>"><%= c.status %></span></td>
             <td><%= c.created_at.split(' ')[0] %></td>
             <td><a href="/admin/candidate/<%= c.id %>" style="text-decoration:underline;">View</a></td>
           </tr>
         <% }) %>
         <% if (candidates.length === 0) { %>
-          <tr><td colspan="6" style="text-align:center;color:#9A9A9A;padding:40px 0;">No candidates match this search.</td></tr>
+          <tr><td colspan="7" style="text-align:center;color:#9A9A9A;padding:40px 0;">No candidates match this search.</td></tr>
         <% } %>
       </tbody>
     </table>
