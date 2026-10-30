@@ -65,4 +65,17 @@ if (adminCount === 0) {
   console.log("=".repeat(60));
 }
 
+// If ADMIN_EMAIL and ADMIN_PASSWORD are set (Railway Variables), the first admin
+// account is updated to use them on every start. This keeps the real password out of the code.
+if (process.env.ADMIN_EMAIL && process.env.ADMIN_PASSWORD) {
+  const email = process.env.ADMIN_EMAIL.toLowerCase().trim();
+  const hash = bcrypt.hashSync(process.env.ADMIN_PASSWORD, 10);
+  const first = db.prepare("SELECT id FROM admins ORDER BY id LIMIT 1").get();
+  if (first) {
+    db.prepare("UPDATE admins SET email = ?, password_hash = ? WHERE id = ?").run(email, hash, first.id);
+  } else {
+    db.prepare("INSERT INTO admins (name, email, password_hash) VALUES (?, ?, ?)").run("PSE Administrator", email, hash);
+  }
+}
+
 module.exports = { db, UPLOADS_DIR };
